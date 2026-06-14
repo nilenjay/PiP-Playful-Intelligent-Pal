@@ -7,7 +7,6 @@ class HapticService {
     try {
       await HapticFeedback.mediumImpact();
     } catch (e) {
-      // Ignore if not supported on the device.
       debugPrint('Haptic feedback failed: $e');
     }
   }

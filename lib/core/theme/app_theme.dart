@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Colors (Curated palette for children's app)
   static const Color primaryColor = Color(0xFF6C63FF); // Vibrant Purple
   static const Color secondaryColor = Color(0xFFFFB86C); // Bright Orange
   static const Color backgroundColor = Color(0xFFF8F9FA); // Soft White
