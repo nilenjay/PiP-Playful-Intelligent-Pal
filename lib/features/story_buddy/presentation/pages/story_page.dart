@@ -13,6 +13,7 @@ import '../widgets/progress_bar_widget.dart';
 import '../widgets/story_card.dart';
 import '../widgets/quiz_section.dart';
 import '../widgets/loading_widget.dart';
+import '../widgets/error_card.dart';
 
 class StoryPage extends StatelessWidget {
   const StoryPage({Key? key}) : super(key: key);
@@ -25,10 +26,10 @@ class StoryPage extends StatelessWidget {
         listenWhen: (previous, current) => previous.quizStatus != current.quizStatus,
         listener: (context, state) {},
         builder: (context, state) {
-          final bool isIdle = state.storyStatus == StoryStatus.initial;
           final bool isLoading = state.storyStatus == StoryStatus.loading;
           final bool isPlaying = state.storyStatus == StoryStatus.playing;
           final bool isCompleted = state.storyStatus == StoryStatus.completed;
+          final bool isError = state.storyStatus == StoryStatus.error;
           final bool isQuizActive = state.quizStatus == QuizStatus.visible ||
               state.quizStatus == QuizStatus.incorrect ||
               state.quizStatus == QuizStatus.correct;
@@ -57,7 +58,7 @@ class StoryPage extends StatelessWidget {
                         // Progress Bar or Loading Card
                         if (isLoading)
                           const LoadingWidget()
-                        else ...[
+                        else if (!isError) ...[
                           ProgressBarWidget(
                             progress: isPlaying ? 0.5 : (isCompleted ? 1.0 : 0.0),
                             labelLeft: isPlaying ? "Pip is reading your story..." : (isCompleted ? "Story finished!" : "Ready to start!"),
@@ -67,7 +68,14 @@ class StoryPage extends StatelessWidget {
                         ],
 
                         // Cards Section
-                        if (!isLoading) ...[
+                        if (isError) ...[
+                          ErrorCard(
+                            message: state.errorMessage,
+                            onRetry: () {
+                              context.read<StoryBuddyBloc>().add(StoryResetRequested());
+                            },
+                          ),
+                        ] else if (!isLoading) ...[
                           const StoryCard(isLocked: false),
                           const SizedBox(height: 16),
                           
@@ -130,6 +138,7 @@ class StoryPage extends StatelessWidget {
                                 selectedAnswer: state.selectedAnswer,
                                 isIncorrect: state.quizStatus == QuizStatus.incorrect,
                                 isCorrect: state.quizStatus == QuizStatus.correct,
+                                shakeTrigger: state.shakeTrigger,
                                 onAnswerSelected: (answer) {
                                   context.read<StoryBuddyBloc>().add(QuizAnswerSelected(answer));
                                 },
@@ -154,7 +163,10 @@ class StoryPage extends StatelessWidget {
           builder: (context, state) {
             final bool isLoading = state.storyStatus == StoryStatus.loading;
             final bool isPlaying = state.storyStatus == StoryStatus.playing;
+            final bool isError = state.storyStatus == StoryStatus.error;
             
+            if (isError) return const SizedBox.shrink(); // Hide FAB on error
+
             String buttonText = "Read Me A Story";
             IconData? buttonIcon = Icons.play_circle_fill;
             Color bgColor = AppTheme.primaryYellow;

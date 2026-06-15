@@ -3,13 +3,13 @@ import 'dart:math';
 
 class ShakeAnimation extends StatefulWidget {
   final Widget child;
-  final bool shake;
+  final int shakeTrigger;
   final VoidCallback onAnimationComplete;
 
   const ShakeAnimation({
     Key? key,
     required this.child,
-    required this.shake,
+    required this.shakeTrigger,
     required this.onAnimationComplete,
   }) : super(key: key);
 
@@ -44,8 +44,8 @@ class _ShakeAnimationState extends State<ShakeAnimation>
   @override
   void didUpdateWidget(ShakeAnimation oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.shake && !oldWidget.shake) {
-      _controller.forward();
+    if (widget.shakeTrigger > oldWidget.shakeTrigger) {
+      _controller.forward(from: 0);
     }
   }
 

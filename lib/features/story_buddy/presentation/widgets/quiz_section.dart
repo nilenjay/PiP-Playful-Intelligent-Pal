@@ -9,6 +9,7 @@ class QuizSection extends StatelessWidget {
   final String? selectedAnswer;
   final bool isIncorrect;
   final bool isCorrect;
+  final int shakeTrigger;
   final Function(String) onAnswerSelected;
 
   const QuizSection({
@@ -17,13 +18,14 @@ class QuizSection extends StatelessWidget {
     this.selectedAnswer,
     required this.isIncorrect,
     required this.isCorrect,
+    required this.shakeTrigger,
     required this.onAnswerSelected,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ShakeAnimation(
-      shake: isIncorrect,
+      shakeTrigger: shakeTrigger,
       onAnimationComplete: () {},
       child: Container(
         decoration: BoxDecoration(
@@ -112,6 +114,19 @@ class QuizSection extends StatelessWidget {
                     color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            if (isCorrect)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  AppConstants.successText,
+                  style: const TextStyle(
+                    color: AppTheme.successGreen,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                   textAlign: TextAlign.center,
                 ),

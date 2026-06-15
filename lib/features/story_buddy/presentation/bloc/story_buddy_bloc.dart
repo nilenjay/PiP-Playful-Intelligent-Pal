@@ -15,6 +15,7 @@ class StoryBuddyBloc extends Bloc<StoryBuddyEvent, StoryBuddyState> {
     on<StoryNarrationCompleted>(_onStoryNarrationCompleted);
     on<StoryNarrationFailed>(_onStoryNarrationFailed);
     on<QuizAnswerSelected>(_onQuizAnswerSelected);
+    on<StoryResetRequested>(_onStoryResetRequested);
   }
 
   Future<void> _onStoryReadRequested(
@@ -90,8 +91,14 @@ class StoryBuddyBloc extends Bloc<StoryBuddyEvent, StoryBuddyState> {
       HapticService.mediumImpact();
       emit(state.copyWith(
         quizStatus: QuizStatus.incorrect,
+        shakeTrigger: state.shakeTrigger + 1,
       ));
     }
+  }
+
+  void _onStoryResetRequested(
+      StoryResetRequested event, Emitter<StoryBuddyState> emit) {
+    emit(StoryBuddyState.initial(StoryContent.quizData));
   }
 
   @override

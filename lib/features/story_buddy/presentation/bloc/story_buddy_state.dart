@@ -11,6 +11,7 @@ class StoryBuddyState extends Equatable {
   final int starCount;
   final String? selectedAnswer;
   final QuizModel quizData;
+  final int shakeTrigger;
 
   const StoryBuddyState({
     required this.storyStatus,
@@ -19,6 +20,7 @@ class StoryBuddyState extends Equatable {
     required this.starCount,
     this.selectedAnswer,
     required this.quizData,
+    required this.shakeTrigger,
   });
 
   factory StoryBuddyState.initial(QuizModel initialQuiz) {
@@ -27,6 +29,7 @@ class StoryBuddyState extends Equatable {
       quizStatus: QuizStatus.hidden,
       starCount: 128, // Initial value based on requirements
       quizData: initialQuiz,
+      shakeTrigger: 0,
     );
   }
 
@@ -37,6 +40,7 @@ class StoryBuddyState extends Equatable {
     int? starCount,
     String? selectedAnswer,
     QuizModel? quizData,
+    int? shakeTrigger,
   }) {
     return StoryBuddyState(
       storyStatus: storyStatus ?? this.storyStatus,
@@ -45,6 +49,7 @@ class StoryBuddyState extends Equatable {
       starCount: starCount ?? this.starCount,
       selectedAnswer: selectedAnswer, // Can be null, so no coalesce unless intended
       quizData: quizData ?? this.quizData,
+      shakeTrigger: shakeTrigger ?? this.shakeTrigger,
     );
   }
 
@@ -56,5 +61,6 @@ class StoryBuddyState extends Equatable {
         starCount,
         selectedAnswer,
         quizData,
+        shakeTrigger,
       ];
 }

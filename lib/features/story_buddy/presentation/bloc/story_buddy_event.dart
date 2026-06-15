@@ -30,3 +30,5 @@ class QuizAnswerSelected extends StoryBuddyEvent {
   @override
   List<Object?> get props => [answer];
 }
+
+class StoryResetRequested extends StoryBuddyEvent {}
