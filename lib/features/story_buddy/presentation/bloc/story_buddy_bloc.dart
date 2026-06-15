@@ -19,7 +19,6 @@ class StoryBuddyBloc extends Bloc<StoryBuddyEvent, StoryBuddyState> {
 
   Future<void> _onStoryReadRequested(
       StoryReadRequested event, Emitter<StoryBuddyState> emit) async {
-    // Prevent duplicate playback requests
     if (state.storyStatus == StoryStatus.loading ||
         state.storyStatus == StoryStatus.playing) {
       return;
